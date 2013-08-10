@@ -15,7 +15,7 @@ module.exports = function( grunt ) {
     copy : {
       production : {
         files : [
-          { src: SRC + '/main.js', dest : 'angular-dribble.js' }
+          { src: SRC + '/dribble.js', dest : 'angular-dribble.js' }
         ]
       }
     },
