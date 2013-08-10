@@ -1,6 +1,6 @@
 {
   "name": "angular-dribble",
-  "version": "0.0.3",
+  "version": "0.0.1",
   "description": "Angular directive that will download defined templates when there is low or no network traffic",
   "directories": {
     "test": "test"

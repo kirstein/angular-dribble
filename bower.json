@@ -1,7 +1,7 @@
 {
-  "name": "angular-routeblocker",
-  "version": "0.0.3",
-  "main": "angular-routeblocker.js",
+  "name": "angular-dribble",
+  "version": "0.0.1",
+  "main": "angular-dribble.js",
   "ignore": [
     "node_modules",
     "components"
