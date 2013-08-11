@@ -4,7 +4,7 @@
   // Configurations
   var DEFAULT_CONFIG = {
     property : null,
-    timeout  : 5000
+    timeout  : 500
   };
 
   var module = angular.module('ngDribble', []);
