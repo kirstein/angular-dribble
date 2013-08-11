@@ -1,15 +1,24 @@
+/* 
+ * angular-dribble 0.0.1
+ * https://github.com/kirstein/angular-dribble
+ * 
+ * Licensed under the MIT license
+ */
 (function(angular) {
   'use strict';
 
+  // Configurations
   var DEFAULT_CONFIG = {
     property : null,
-    timeout  : 500
+    timeout  : 5000
   };
 
   var module = angular.module('ngDribble', []);
 
   /**
    * Dribble provider
+   *
+   * Provider that provides configuration for the dribble service
    */
   module.provider('$dribble', function() {
     var config = DEFAULT_CONFIG;
@@ -41,6 +50,12 @@
     };
   });
 
+  /**
+   * Main service for dealing with template downloading.
+   * Will build the template list and check if the template is needed for downloading or not.
+   *
+   * Deals with the timeout handling and making sure we dont download templates when there are active user requests
+   */
   module.service('ngDribbleService', [ '$templateCache', '$injector', '$timeout', '$dribble', '$filter', function($templateCache, $injector, $timeout, $dribble, $filter) {
 
     var downloaded = {},                 // list of to-be or already downloaded templates
@@ -89,8 +104,6 @@
      * Checks if all templates have been downloaded
      * If the templates have been initiated and they are empty
      * then we can safely assume that everything has been downloaded
-     *
-     *  @return {Boolean} true/false representing if everything has been downloaded or not
      */
     function isEverythingDownloaded() {
       return angular.isArray(templates) && !templates.length;
@@ -182,21 +195,39 @@
     };
   }]);
 
-  module.factory('ngDribbleInterceptor', [ 'ngDribbleService', '$q', function(ngDribbleService, $q) {
-    return function(promise) {
-      return promise.then(function(response) {
-        ngDribbleService.notify(response.config.url);
-      }, function(response) {
-        ngDribbleService.notify(response.config.url);
-        return $q.reject(response);
-      });
-    };
-  }]);
-
+  /**
+   * Register an interceptor for all responses.
+   * If the response is gotten (we dont care if its a failed one or not)
+   * then we will notify the ngDribbleService
+   *
+   *  @param {HttpProvider} httpProvider
+   */
   module.config(['$httpProvider', function($httpProvider) {
-    $httpProvider.responseInterceptors.push('ngDribbleInterceptor');
+    $httpProvider.responseInterceptors.push(['ngDribbleService', '$q', function(ngDribbleService, $q) {
+
+      // Notify the dribbleService
+      function notify(response) {
+        ngDribbleService.notify(response.config.url);
+      }
+
+      // Interceptor magic
+      return function(promise) {
+        return promise.then(function(response) {
+          notify(response);
+          return response;
+        }, function(response) {
+          notify(response);
+          return $q.reject(response);
+        });
+      };
+    }]);
   }]);
 
+  /**
+   * Invokes the dribble service #resetTimer function right after the angular app is bootstraped
+   *
+   * @param {ngDribbleService} ngDribbleService
+   */
   module.run(['ngDribbleService', function(ngDribbleService) {
     ngDribbleService.resetTimer();
   }]);

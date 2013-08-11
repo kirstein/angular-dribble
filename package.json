@@ -2,12 +2,14 @@
   "name": "angular-dribble",
   "version": "0.0.1",
   "description": "Angular directive that will download defined templates when there is low or no network traffic",
+  "homepage" : "https://github.com/kirstein/angular-dribble",
+  "license"  : "MIT",
   "directories": {
     "test": "test"
   },
   "repository": {
-    "type" : "git",
-    "url"  : "https://github.com/kirstein/angular-dribble.git"
+    "type": "git",
+    "url": "https://github.com/kirstein/angular-dribble.git"
   },
   "author": "Mikk Kirstein",
   "devDependencies": {
@@ -23,6 +25,7 @@
     "karma-jasmine": "~0.1.0",
     "karma-requirejs": "~0.1.0",
     "karma-coffee-preprocessor": "~0.1.0",
-    "karma-phantomjs-launcher": "~0.1.0"
+    "karma-phantomjs-launcher": "~0.1.0",
+    "grunt-banner": "~0.1.4"
   }
 }
